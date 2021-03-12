@@ -1,0 +1,33 @@
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  creationTimestamp: null
+  name: monkey
+spec:
+  jobTemplate:
+    metadata:
+      creationTimestamp: null
+      name: monkey
+    spec:
+      template:
+        metadata:
+          creationTimestamp: null
+        spec:
+          containers:
+          - image: busybox
+            command:
+            - rm
+            - /tmp/banana
+            name: chaos
+            resources: {}
+            volumeMounts:
+             - mountPath: /tmp
+               name: here
+          restartPolicy: OnFailure
+          volumes:
+           - name: here
+             hostPath:
+              path: /tmp
+              type: Directory
+  schedule: '*/1 * * * *'
+status: {}

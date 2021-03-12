@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: banana-tree
+  name: banana-tree
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: banana-tree
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: banana-tree
+    spec:
+      initContainers:
+      containers:
+      - image: ubuntu
+        name: ubuntu
+        command: [ "/bin/bash", "-c", "--" ]
+        args: [ "touch /tmp/banana; while true; do sleep 30; done;" ] 
+        resources: {}
+        volumeMounts:
+             - mountPath: /tmp
+               name: vol1
+        livenessProbe:
+         exec:
+          command:
+           - cat
+           - /tmp/banana
+         initialDelaySeconds: 5
+         periodSeconds: 5
+      volumes:
+           - name: vol1
+             hostPath:
+              path: /tmp
+              type: Directory
+status: {}
